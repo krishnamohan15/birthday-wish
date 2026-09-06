@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday, Baby! 💖</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Sacramento&display=swap');
+    
+    body {
+      font-family: 'Fredoka', sans-serif;
+      background-color: #fff0f5;
+      overflow-x: hidden;
+    }
+    .cursive {
+      font-family: 'Sacramento', cursive;
+    }
+    .step {
+      display: none;
+      animation: fadeIn 0.5s ease-in-out forwards;
+    }
+    .step.active {
+      display: flex;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .balloon {
+      transition: transform 0.2s, opacity 0.2s;
+      cursor: pointer;
+    }
+    .balloon:hover {
+      transform: scale(1.1);
+    }
+    .card-stack {
+      position: relative;
+      width: 260px;
+      height: 320px;
+    }
+    .card {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transition: all 0.4s ease;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+  <!-- Step 1: Welcome -->
+  <div id="step-1" class="step active flex-col items-center text-center max-w-md w-full bg-white/80 backdrop-blur-sm p-6 rounded-3xl shadow-xl border border-pink-200">
+    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnFlOXAzdWtnc25sOHhveWkxb3U1aDVjcWV6Y3N5MHVxeWF4OTN3eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/KztT2c4u8mYYUiMKdJ/giphy.gif" alt="Cute Bears" class="w-48 h-48 object-cover rounded-2xl mb-4">
+    <h1 class="text-3xl font-bold text-pink-600 mb-2">Happy Birthday, Baby! 🎂</h1>
+    <p class="text-gray-600 mb-6">Are you excited for what's next?</p>
+    <div class="flex gap-4">
+      <button onclick="nextStep(2)" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-full transition shadow-md">Yes!</button>
+      <button id="no-btn" onmouseover="moveNoButton()" onclick="moveNoButton()" class="bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-full transition">No</button>
+    </div>
+  </div>
+
+  <!-- Step 2: Balloon Pop -->
+  <div id="step-2" class="step flex-col items-center text-center max-w-md w-full bg-white/80 backdrop-blur-sm p-6 rounded-3xl shadow-xl border border-pink-200">
+    <h2 class="text-2xl font-bold text-pink-600 mb-2">Pop all 4 balloons 🎈</h2>
+    <p class="text-gray-500 text-sm mb-6">Tap each balloon to reveal the secret message!</p>
+    <div class="grid grid-cols-2 gap-6 my-4 w-full px-4">
+      <div id="b1" onclick="popBalloon('b1', 'You')" class="balloon bg-red-200 text-red-500 h-24 rounded-full flex items-center justify-center font-bold text-lg shadow-md">🎈 Pop Me</div>
+      <div id="b2" onclick="popBalloon('b2', 'Are')" class="balloon bg-blue-200 text-blue-500 h-24 rounded-full flex items-center justify-center font-bold text-lg shadow-md">🎈 Pop Me</div>
+      <div id="b3" onclick="popBalloon('b3', 'My')" class="balloon bg-green-200 text-green-500 h-24 rounded-full flex items-center justify-center font-bold text-lg shadow-md">🎈 Pop Me</div>
+      <div id="b4" onclick="popBalloon('b4', 'World 💕')" class="balloon bg-purple-200 text-purple-500 h-24 rounded-full flex items-center justify-center font-bold text-lg shadow-md">🎈 Pop Me</div>
+    </div>
+    <button id="step-2-next" onclick="nextStep(3)" class="hidden mt-4 bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-full transition shadow-md">Continue ✨</button>
+  </div>
+
+  <!-- Step 3: Blow Candle -->
+  <div id="step-3" class="step flex-col items-center text-center max-w-md w-full bg-white/80 backdrop-blur-sm p-6 rounded-3xl shadow-xl border border-pink-200">
+    <h2 class="text-2xl font-bold text-pink-600 mb-1">Blow the candle, Baby 🕯️</h2>
+    <p class="text-gray-500 text-sm mb-6">Close your eyes and make a wish!</p>
+    <div onclick="blowCandle()" class="cursor-pointer my-6">
+      <div id="flame" class="w-6 h-8 bg-yellow-400 rounded-full mx-auto animate-pulse shadow-[0_0_15px_rgba(250,204,21,0.8)]"></div>
+      <div class="w-2 h-6 bg-amber-800 mx-auto"></div>
+      <div class="w-32 h-20 bg-pink-300 rounded-t-3xl mx-auto border-b-4 border-pink-400 flex items-center justify-center text-white text-xs">🍰 Yummy Cake</div>
+    </div>
+    <p id="candle-text" class="text-xs text-gray-400 mt-2">Tap the candle flame to blow it out</p>
+    <button id="step-3-next" onclick="nextStep(4)" class="hidden mt-4 bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-full transition shadow-md">Continue ❤️</button>
+  </div>
+
+  <!-- Step 4: Virtual Bouquet -->
+  <div id="step-4" class="step flex-col items-center text-center max-w-md w-full bg-white/80 backdrop-blur-sm p-6 rounded-3xl shadow-xl border border-pink-200">
+    <h2 class="text-2xl font-bold text-pink-600 mb-4">Your Rose Bouquet 💐</h2>
+    <div class="text-7xl my-6 animate-bounce">🌹🌹🌹<br>🌹🌹🌹</div>
+    <p class="text-gray-600 mb-6">Fresh flowers for the most special person!</p>
+    <button onclick="nextStep(5)" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-full transition shadow-md">See Memories ✨</button>
+  </div>
+
+  <!-- Step 5: Memory Cards -->
+  <div id="step-5" class="step flex-col items-center text-center max-w-md w-full bg-white/80 backdrop-blur-sm p-6 rounded-3xl shadow-xl border border-pink-200">
+    <h2 class="text-2xl font-bold text-pink-600 mb-1">Some Sweet Moments 📸</h2>
+    <p class="text-gray-500 text-sm mb-4">Tap card to see the next picture!</p>
+    <div class="card-stack my-4" onclick="cycleCard()">
+      <div id="card-3" class="card bg-white p-3 rounded-xl border border-gray-200 rotate-3">
+        <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=400" class="w-full h-48 object-cover rounded-lg">
+        <p class="cursive text-xl text-gray-700 mt-3">Forever & Always 💖</p>
+      </div>
+      <div id="card-2" class="card bg-white p-3 rounded-xl border border-gray-200 -rotate-3">
+        <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=400" class="w-full h-48 object-cover rounded-lg">
+        <p class="cursive text-xl text-gray-700 mt-3">Best Smile Ever 😊</p>
+      </div>
+      <div id="card-1" class="card bg-white p-3 rounded-xl border border-gray-200 rotate-1">
+        <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=400" class="w-full h-48 object-cover rounded-lg">
+        <p class="cursive text-xl text-gray-700 mt-3">Celebrating You 🎉</p>
+      </div>
+    </div>
+    <button onclick="nextStep(6)" class="mt-6 bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-full transition shadow-md">Read My Letter 💌</button>
+  </div>
+
+  <!-- Step 6: Envelope & Letter -->
+  <div id="step-6" class="step flex-col items-center text-center max-w-md w-full bg-white/80 backdrop-blur-sm p-6 rounded-3xl shadow-xl border border-pink-200">
+    <h2 class="text-2xl font-bold text-pink-600 mb-4">A Message From My Heart ✉️</h2>
+    <div id="envelope" onclick="openLetter()" class="w-full bg-pink-100 p-8 rounded-2xl border-2 border-dashed border-pink-300 cursor-pointer hover:bg-pink-200 transition">
+      <span class="text-5xl">💌</span>
+      <p class="text-pink-600 font-bold mt-2">TAP TO OPEN</p>
+    </div>
+    <div id="letter" class="hidden text-left bg-amber-50 p-6 rounded-2xl border border-amber-200 shadow-inner max-h-60 overflow-y-auto w-full">
+      <p class="cursive text-2xl text-pink-700 mb-2">Dear Baby,</p>
+      <p class="text-gray-700 text-sm leading-relaxed mb-3">
+        Happy Birthday to someone truly special! You bring so much warmth, laughter, and sweetness into my life every single day. 
+      </p>
+      <p class="text-gray-700 text-sm leading-relaxed mb-3">
+        I am so grateful for every moment we share together. May this year bring you as much happiness and joy as you bring to everyone around you.
+      </p>
+      <p class="cursive text-xl text-pink-700 text-right">With all my love ❤️</p>
+    </div>
+    <button id="step-6-next" onclick="nextStep(7)" class="hidden mt-6 bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-full transition shadow-md">One Last Surprise 🎁</button>
+  </div>
+
+  <!-- Step 7: Final Gift -->
+  <div id="step-7" class="step flex-col items-center text-center max-w-md w-full bg-white/80 backdrop-blur-sm p-6 rounded-3xl shadow-xl border border-pink-200">
+    <h2 class="text-2xl font-bold text-pink-600 mb-2">One Last Thing...</h2>
+    <div id="gift-box" onclick="openGift()" class="text-8xl my-6 cursor-pointer hover:scale-110 transition duration-300">🎁</div>
+    <div id="final-screen" class="hidden flex-col items-center">
+      <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Zyd2tzZXd6ejF3OHR6NXhhNDR6aWp1bms5OHR2aGxwd2JjY2Z3bCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/LMuSfE0aJUtlC/giphy.gif" alt="Hug" class="w-48 rounded-xl mb-4 shadow">
+      <p class="cursive text-3xl text-pink-600 mb-4">I Love You So Much!</p>
+      <button onclick="location.reload()" class="bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-full hover:bg-gray-300 transition">Replay 🔄</button>
+    </div>
+  </div>
+
+  <script>
+    function nextStep(stepNum) {
+      document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+      document.getElementById(`step-${stepNum}`).classList.add('active');
+    }
+
+    function moveNoButton() {
+      const btn = document.getElementById('no-btn');
+      const x = Math.random() * (window.innerWidth - 100) - window.innerWidth / 2;
+      const y = Math.random() * (window.innerHeight - 100) - window.innerHeight / 2;
+      btn.style.transform = `translate(${x}px, ${y}px)`;
+    }
+
+    let poppedCount = 0;
+    function popBalloon(id, text) {
+      const el = document.getElementById(id);
+      if (!el.classList.contains('popped')) {
+        el.classList.add('popped');
+        el.style.backgroundColor = 'transparent';
+        el.style.border = '2px dashed #f472b6';
+        el.innerHTML = `<span class="text-pink-600 font-bold">${text}</span>`;
+        poppedCount++;
+        if (poppedCount === 4) {
+          document.getElementById('step-2-next').classList.remove('hidden');
+        }
+      }
+    }
+
+    function blowCandle() {
+      document.getElementById('flame').style.display = 'none';
+      document.getElementById('candle-text').innerText = 'Make a wish! ✨';
+      document.getElementById('step-3-next').classList.remove('hidden');
+      confetti({ particleCount: 50, spread: 60 });
+    }
+
+    let cards = ['card-1', 'card-2', 'card-3'];
+    function cycleCard() {
+      const topCardId = cards.pop();
+      const topCard = document.getElementById(topCardId);
+      topCard.style.transform = 'translateY(-150%) rotate(20deg)';
+      topCard.style.opacity = '0';
+      setTimeout(() => {
+        topCard.style.transform = 'none';
+        topCard.style.opacity = '1';
+        cards.unshift(topCardId);
+        cards.forEach((id, index) => {
+          document.getElementById(id).style.zIndex = index;
+        });
+      }, 400);
+    }
+
+    function openLetter() {
+      document.getElementById('envelope').classList.add('hidden');
+      document.getElementById('letter').classList.remove('hidden');
+      document.getElementById('step-6-next').classList.remove('hidden');
+    }
+
+    function openGift() {
+      document.getElementById('gift-box').classList.add('hidden');
+      document.getElementById('final-screen').classList.remove('hidden');
+      document.getElementById('final-screen').classList.add('flex');
+      confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
+    }
+  </script>
+</body>
+</html>
